@@ -55,10 +55,13 @@ class Controleur
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	public function affichePage($action,$vue)
 		{
+	    //CONTROLE DU COMPTE ACTIF HEHE
+		
+		
 		//SELON la vue demandée
 		switch ($vue)
 			{
-			case 'compte':
+			case 'compte': 	
 				$this->vueCompte($action);
 				break;
 			case 'film':
@@ -101,8 +104,46 @@ class Controleur
 			//CAS ajouter un utilisateur ------------------------------------------------------------------------------
 			case 'nouveauLogin' :
 				// ici il faut pouvoir recuperer un nouveau utilisateur
-				require 'Vues/construction.php';
-				break;	
+				$unPrenomClient=$_GET['prenomClient'];
+				$unNomClient=$_GET['nomClient'];
+				$unEmailClient=$_GET['emailClient'];
+				$uneDateAbonnementClient=$_GET['dateAbonnementClient'];
+				$unLogin=$_GET['login'];
+				$unPassword=$_GET['password'];
+							
+				if($this->maVideotheque->verifLogin($unLogin, $unPassword) == 1 || empty($unLogin) || empty($unPassword)) //  || 
+				{
+				    echo "ERREUR LORS DE L'INSCRIPTION";			    
+				}
+				else 
+				{
+    				$unIdClient=$this->maVideotheque->donneProchainIdentifiant('CLIENT','idClient');
+    				$this->maVideotheque->ajouteUnClient($unNomClient, $unPrenomClient, $unEmailClient, $uneDateAbonnementClient, $unLogin, $unPassword, $unIdClient);				
+    				/*
+        				//ENVOI DU MAIL A L'ADMIN
+        				$headers1 ='From: message automatique\n';
+        				$headers1 .='Reply-To: joseph.ppe3@gmail.com'."\n";
+        				$headers1 .='Content-Type: text/html; charset="iso-8859-1"'."\n";
+        				$headers1 .='Content-Transfer-Encoding: 8bit';				
+        				$message1 ='<html><head><title>Inscription d\'un nouvel utilisateur</title></head>
+                        <body>Confirmation d\'inscription de l\'utilisateur '.$unNomClient.' '.$unPrenomClient.'</body></html>';   
+        				
+        				mail('joseph.ppe3@gmail.com', 'Sujet', $message1, $headers1);
+        				
+        				//ENVOI DU MAIL DE TRAITEMENT A L'UTILISATEUR
+        				$headers1 ='From: message automatique\n';
+        				$headers1 .='Reply-To: joseph.ppe3@gmail.com'."\n";
+        				$headers1 .='Content-Type: text/html; charset="iso-8859-1"'."\n";
+        				$headers1 .='Content-Transfer-Encoding: 8bit';
+        				$message1 ='<html><head><title>Votre inscription sera traitée dans les 24h</title></head>
+                        <body></body></html>';
+        				
+        				mail($unEmailClient, 'Sujet', $message1, $headers1);*/		    
+    				require 'Vues/enregistrer.php';
+			} 
+				break;
+
+	
 			//CAS verifier un utilisateur ------------------------------------------------------------------------------
 			case 'verifLogin' :
 				// ici il faut pouvoir vérifier un login un nouveau utilisateur
@@ -110,10 +151,14 @@ class Controleur
 				//pour cela je verifie dans le conteneurClient via la gestion.
 				$unLogin=$_GET['login'];
 				$unPassword=$_GET['password'];
-				$resultat=$this->maVideotheque->verifLogin($unLogin, $unPassword);
+				$resultat=$this->maVideotheque->verifLogin($unLogin, $unPassword);	
+				$controleActif->maVideotheque->donneActifClientDepuisLogin($unLogin);
 						//si le client existe alors j'affiche le menu et la page visuGenre.php
 						if($resultat==1)
 						{
+							if($controleActif=1){
+								 echo "Votre compte n'est pas validé. Merci d'envoyer votre chèque.";
+								}
 							require 'Vues/menu.php';
 							echo $this->maVideotheque->listeLesGenres();	
 						}
@@ -130,9 +175,10 @@ class Controleur
 									</div>
 									<meta http-equiv='refresh' content='1;index.php'>";
 						}
-				break;	
+				break;				
 			}
 		}
+	
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//----------------------------Film--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -144,8 +190,12 @@ class Controleur
 			
 			//CAS visualisation de tous les films-------------------------------------------------------------------------------------------------
 			case "visualiser" :
-				//ici il faut pouvoir visualiser l'ensemble des films 
-				require 'Vues/construction.php';
+				//ici il faut pouvoir visualiser l'ensemble des films
+				echo 'titi';
+				$_SESSION['nbFilms'] = $this->maVideotheque->donneNbFilms();
+			    $_SESSION['lesFilms'] = $this->maVideotheque->listeLesFilms();
+			    echo "Session: ".$_SESSION['lesFilms'];
+				require 'Vues/voirFilm.php';
 				break;
 				
 			}
@@ -215,5 +265,6 @@ class Controleur
 			}
 		}	
 
-	}	
+	}
+	
 ?>

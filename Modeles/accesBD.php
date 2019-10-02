@@ -18,12 +18,20 @@ class accesBD
 	public function __construct()
 		{
 		// ORDI PROFSIO
-		$this->hote="172.16.0.50";
-		$this->port="";
-		$this->login="ALT19DENYS";
-		$this->passwd="C598a7ca*";
-		$this->base="videoppe3_Oxana_Titouan_Raphael";
-		
+								
+								
+			/*$this->hote="172.16.0.50";
+			$this->port="";
+			$this->login="ALT19DENYS";
+			$this->passwd="C598a7ca*";
+			$this->base="videoppe3_Oxana_Titouan_Raphael";*/
+
+			$this->hote="localhost";
+			$this->port="";
+			$this->login="root";
+			$this->passwd="";
+			$this->base="videoppe3";
+
 		// ORDI DEV2
 		/*$this->hote = "localhost";
 		$this->port = "";
@@ -43,11 +51,11 @@ class accesBD
         {
 			//echo "sqlsrv:server=$this->hote$this->port;Database=$this->base"." | ".$this->login." | ".$this->passwd;
 			// Pour SQL Server
-			$this->conn = new PDO("sqlsrv:server=$this->hote$this->port;Database=$this->base", $this->login, $this->passwd);
-			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION ); 
+			//$this->conn = new PDO("sqlsrv:server=$this->hote$this->port;Database=$this->base", $this->login, $this->passwd);
+			//$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION ); 
             
             // Pour Mysql/MariaDB
-            /*$this->conn = new PDO("mysql:dbname=$this->base;host=$this->hote",$this->login, $this->passwd);*/
+            $this->conn = new PDO("mysql:dbname=$this->base;host=$this->hote",$this->login, $this->passwd);
             $this->boolConnexion = true;
         }
         catch(PDOException $e)
@@ -98,7 +106,7 @@ class accesBD
 		//génération automatique de l'identifiant
 		$sonId = $this->donneProchainIdentifiant("client","idClient");
 		
-		$requete = $this->conn->prepare("INSERT INTO CLIENT (nomClient,prenomClient, emailClient, dateAbonnementClient,loginClient, pwdClient) VALUES (?,?,?,?,?,?)");
+		$requete = $this->conn->prepare("INSERT INTO CLIENT (nomClient,prenomClient, emailClient, dateAbonnementClient,login, pwd,actif) VALUES (?,?,?,?,?,?,1)");
 		//définition de la requête SQL
 		$requete->bindValue(1,$unNomClient);
 		$requete->bindValue(2,$unPrenomClient);
@@ -308,7 +316,7 @@ class accesBD
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-----------------------------DONNE LE PROCHAIN INDENTIFIANT---------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	private function donneProchainIdentifiant($uneTable,$unIdentifiant)
+	public function donneProchainIdentifiant($uneTable,$unIdentifiant)
 		{
 		//$prochainId[0]=0;
 		//définition de la requête SQL

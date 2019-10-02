@@ -6,15 +6,35 @@ function chargerPage()
 {
 	$monControleur = new Controleur();
 	$monControleur->afficheEntete();
-		if(isset($_GET['login']))
-		{
-				if ((isset($_GET['vue']))&& (isset($_GET['action'])))
-				{   $monControleur->affichePage($_GET['action'],$_GET['vue']);
+	
+		if(isset($_GET['login']) && isset($_GET['password']))
+		{	echo "je suis dans le remplissage du login";    
+		    $_SESSION['login'] = $_GET['login'];
+		    $_SESSION['password'] = $_GET['password'];
+		}
+		
+		if(isset($_SESSION['login']) && isset($_SESSION['password']))
+		{ 	echo "la session existe";
+		    if ((isset($_GET['vue']))&& (isset($_GET['action'])))
+				{   
+				    echo $_GET['action']; 
+				    echo $_GET['vue'];
+				    $monControleur->affichePage($_GET['action'],$_GET['vue']);
 				}
 		}
 		else
 		{
-					premier_affichage();
+			echo "pas de session";
+			if ((isset($_GET['vue']))&& (isset($_GET['action'])))
+			{   
+					echo "je crée un nouvel utilisateur";
+					$monControleur->affichePage($_GET['action'],$_GET['vue']);
+			}
+			else
+			{
+				echo "je viens d arriver";
+				premier_affichage();
+			}
 		}
 	$monControleur->affichePiedPage();
 }
@@ -32,7 +52,7 @@ function chargerPage()
 					</tr>
 					<tr align=center>
 						<td>
-								<form href = 'index.php?vue=compte&action=nouveauLogin' method='post'>
+								<form href = 'index.php?vue=compte&action=nouveauLogin' method='POST'>
 									<input type='text' name='nomClient' value='saisir votre nom'/><br>
 									<input type='text' name='prenomClient' value='Saisir votre prenom'/><br>
 									<input type='text' name='emailClient' value='Saisir votre email'/><br>
@@ -43,7 +63,7 @@ function chargerPage()
 								   </form>
 						</td>
 						<td>
-							<form action=index.php method=GET>
+							<form action=index.php method=POST>
 									<input type='text' name='login'/><br>
 									<input type='text' name='password'/><br>
 									<input type='hidden' name='vue' value='compte'>
@@ -74,13 +94,15 @@ function chargerPage()
                                         </form>
                                     </td>
                                     <td class='justify-content-center td-table'>
-                                        <form href = 'index.php?vue=compte&action=nouveauLogin' method='post'>
+                                        <form action = 'index.php' method=GET>
                                             <input class='form-group' type='text' name='nomClient' placeholder='saisir votre nom'/><br>
                                             <input class='form-group' type='text' name='prenomClient' placeholder='Saisir votre prenom'/><br>
                                             <input class='form-group' type='text' name='emailClient' placeholder='Saisir votre email'/><br>
                                             <input class='form-group' type='date' name='dateAbonnementClient' placeholder='Date souhaitée d abonnement'/><br>
                                             <input class='form-group' type='text' name='login' placeholder='Saisir votre login'/><br>
                                             <input class='form-group' type='password' name='password' placeholder='Choisir un mot de passe'/><br>
+                                            <input type='hidden' name='vue' value='compte'>
+                                            <input type='hidden' name='action' value='nouveauLogin'/>
                                             <input class='btn btn-secondary' type='submit' value='Accéder'/>
                                         </form>
                                     </td>

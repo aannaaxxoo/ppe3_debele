@@ -172,12 +172,12 @@ Class gestionVideo
 
 
 //METHODE INSERANT UN CLIENT----------------------------------------------------------------------------------------------------------
-	public function ajouteUnClient($unIdClient, $unNomClient, $unPrenomClient, $unEmailClient, $uneDateAbonnement)
+	public function ajouteUnClient($unNomClient, $unPrenomClient, $unEmailClient, $uneDateAbonnement, $unLogin, $unPassword, $unIdClient)
 		{
 		//insertion du client dans la base de données
-		$sonNumero = $this->maBD->insertClient($unIdClient, $unNomClient, $unPrenomClient, $unEmailClient, $uneDateAbonnement);
+		$this->maBD->insertClient($unNomClient, $unPrenomClient, $unEmailClient, $uneDateAbonnement, $unLogin, $unPassword);
 		//instanciation du client et ajout de celui-ci dans la collection
-		$this->tousLesClients->ajouteUnClient($unIdClient, $unNomClient, $unPrenomClient, $unEmailClient, $uneDateAbonnement);
+		$this->tousLesClients->ajouteUnClient($unIdClient, $unNomClient, $unPrenomClient, $unEmailClient, $uneDateAbonnement, $unLogin, $unPassword);
 		}
 	//METHODE INSERANT UN FILM----------------------------------------------------------------------------------------------------------
 	public function ajouteUnFilm($unIdFilm,$unTitreFilm, $unRealisateurFilm, $unIdGenre,$uneDureeFilm)
@@ -336,7 +336,17 @@ Class gestionVideo
 		{
 		return $this->tousLesEpisodes->lesEpisodesAuFormatHTML();
 		}		
+	
+	//METHODE DONNANT LE PROCHAIN INDENTIFIANT----------------------------------------------------------------	
+	public function donneProchainIdentifiant($uneTable,$unIdentifiant)
+	{
+		return $this->maBD->donneProchainIdentifiant($uneTable,$unIdentifiant);
+	}
 
+	public function donneActifClientDepuisLogin($unLoginClient)
+	{
+		return $this->tousLesClients->donneActifClientDepuisLogin($unLoginClient);
+	}
 		
 	}
 	

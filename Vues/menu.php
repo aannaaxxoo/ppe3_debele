@@ -1,12 +1,13 @@
-﻿<div class="navbar-collapse collapse w-100" id="navbar3">
+﻿
+<div class="navbar-collapse collapse w-100" id="navbar3">
         <ul class="navbar-nav w-100">
             <li class="nav-item active">
                 <ul class="dropdown spec-bot">
                     <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">Les Films<span class="caret"></span></button>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Voir tous les films</a></li>
+                        <li><a href="index.php?vue=film&action=visualiser">Voir tous les films</a></li>
                     </ul>
-                </ul>    
+                </ul>   
             </li>
             <li class="nav-item active">
                 <ul class="dropdown">
