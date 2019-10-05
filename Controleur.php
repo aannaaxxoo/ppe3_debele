@@ -26,6 +26,19 @@ class Controleur
 	public function afficheEntete()
 		{
 		//appel de la vue de l'entête
+
+		if(isset($_SESSION['login']) && isset($_SESSION['password']))
+		{
+			$login = $_SESSION['login'];
+			echo 'login :'.$login.'<br>';
+			$actif = $this->maVideotheque->donneActifDepuisLogin('CLIENT',$login);
+			echo 'actif: '.$actif;
+			if($actif == 0){	
+				echo '<img src="Images/alert.png" alt="Alerte">';
+				echo 'Votre compte est bien à jour';
+			}	
+		}
+
 		require 'Vues/entete.php';
 		}
 		
@@ -152,29 +165,26 @@ class Controleur
 				$unLogin=$_GET['login'];
 				$unPassword=$_GET['password'];
 				$resultat=$this->maVideotheque->verifLogin($unLogin, $unPassword);	
-				$controleActif->maVideotheque->donneActifClientDepuisLogin($unLogin);
-						//si le client existe alors j'affiche le menu et la page visuGenre.php
-						if($resultat==1)
-						{
-							if($controleActif=1){
-								 echo "Votre compte n'est pas validé. Merci d'envoyer votre chèque.";
-								}
-							require 'Vues/menu.php';
-							echo $this->maVideotheque->listeLesGenres();	
-						}
-						else
-						{
-							// destroy la session et je repars sur l'acceuil en affichant un texte pour prévenir la personne
-							//des mauvais identifiants;
-							session_destroy();
-							echo "</nav>
-									<div class='container h-100'>
-										<div class='row h-100 justify-content-center align-items-center'>
-											<span class='text-white'>Identifiants incorrects</span>
-										</div>
-									</div>
-									<meta http-equiv='refresh' content='1;index.php'>";
-						}
+
+				//si le client existe alors j'affiche le menu et la page visuGenre.php
+				if($resultat==1)
+				{
+					require 'Vues/menu.php';
+					echo $this->maVideotheque->listeLesGenres();	
+				}
+				else
+				{
+					// destroy la session et je repars sur l'acceuil en affichant un texte pour prévenir la personne
+					//des mauvais identifiants;
+					session_destroy();
+					echo "</nav>
+							<div class='container h-100'>
+								<div class='row h-100 justify-content-center align-items-center'>
+									<span class='text-white'>Identifiants incorrects</span>
+								</div>
+							</div>
+							<meta http-equiv='refresh' content='1;index.php'>";
+				}
 				break;				
 			}
 		}

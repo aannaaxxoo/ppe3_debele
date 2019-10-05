@@ -76,31 +76,30 @@ Class conteneurClient
 		return $leBonClient;
 		}
 
-		public function donneActifClientDepuisLogin($unLoginClient)
+		/*public function donneActifClientDepuisLogin($unLoginClient)
 		{
 		//initialisation d'un booléen (on part de l'hypothèse que le client n'existe pas)
 		$trouve=false;
-		$actif=null;
+		$monActif=null;
 		//création d'un itérateur sur la collection lesClients
 		$iClient = $this->lesClients->getIterator();
 		//TQ on a pas trouvé le client et que l'on est pas arrivé au bout de la collection
 		while ((!$trouve)&&($iClient->valid()))
 			{
 			//SI le numéro du client courant correspond au numéro passé en paramètre
-			if ($iClient->current()->getLoginClient()==$unLoginClient)
+			if ($iClient->current()->getIdClient()==$unLoginClient)
 				{
 				//maj du booléen
 				$trouve=true;
 				//sauvegarde du client courant
-				$actif = $iClient->getLoginClient();
+				$monActif = $iClient->getActif();
 				
 				}
 			//SINON on passe au client suivant
 			else
 				$iClient->next();
 			}
-		return $actif;
-		}		
+		return $monActif;*/
 
 
 	public function verificationExistanceClient($unLogin, $unPassword)
@@ -123,7 +122,7 @@ Class conteneurClient
 			//echo "Login : ".strcmp($unLogin,$testLogin)."<br/>".$test;
 			//echo "Password : ".strcmp($unPassword,$testPassword)."<br/>".$test2;
 			//On test avec la fonction strcmp
-			if (strcmp($unLogin,$testLogin)===0 || strcmp($unPassword,$testPassword)===0)
+			if (strcmp($unLogin,$testLogin)===0 && strcmp($unPassword,$testPassword)===0)
 				{
 				//maj du booléen
 				$trouve=1;

@@ -10,7 +10,7 @@ include 'Conteneurs/conteneurSupport.php';
 include 'accesBD.php';
 
 Class gestionVideo
-	{
+{
 	//ATTRIBUTS PRIVES---------------------------------------------------------------------------------------------------------------------------
 	private $tousLesClients;
 	private $tousLesSupports;
@@ -207,6 +207,7 @@ Class gestionVideo
 		//instanciation du genre et ajout de celui-ci dans la collection
 		$this->tousLesGenres->ajouteUnGenre($sonNumero,$unLibelleGenre);
 		}
+
 	//METHODE INSERANT UNE SAISON--------------------------------------------------------------------------------------------------------
 	public function ajouteUneSaison($unIdSerie,$uneAnneeSaison, $unNbrEpisodesPrevus)
 		{
@@ -219,6 +220,7 @@ Class gestionVideo
 		$this->toutesLesSaisons->ajouteUneSaison($unIdSaison,$uneAnneeSaison, $unNbrEpisodeSaison, $laSerie);
 		}	
 		
+
     //METHODE INSERANT UN EMPRUNT--------------------------------------------------------------------------------------------------------
 	public function ajouteUnEmprunt($uneDateEmprunt, $unIdClient, $unIdSupport)
 		{
@@ -343,11 +345,10 @@ Class gestionVideo
 		return $this->maBD->donneProchainIdentifiant($uneTable,$unIdentifiant);
 	}
 
-	public function donneActifClientDepuisLogin($unLoginClient)
-	{
-		return $this->tousLesClients->donneActifClientDepuisLogin($unLoginClient);
-	}
-		
-	}
+	public function donneActifDepuisLogin($uneTable,$unLogin)
+		{
+		return $this->maBD->donneActifDepuisLogin($uneTable,$unLogin);
+		}
+}
 	
 ?>

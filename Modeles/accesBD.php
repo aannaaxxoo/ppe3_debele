@@ -106,7 +106,7 @@ class accesBD
 		//génération automatique de l'identifiant
 		$sonId = $this->donneProchainIdentifiant("client","idClient");
 		
-		$requete = $this->conn->prepare("INSERT INTO CLIENT (nomClient,prenomClient, emailClient, dateAbonnementClient,login, pwd,actif) VALUES (?,?,?,?,?,?,1)");
+		$requete = $this->conn->prepare("INSERT INTO CLIENT (nomClient,prenomClient, emailClient, dateAbonnementClient,login, pwd,actif) VALUES (?,?,?,?,?,?,0)");
 		//définition de la requête SQL
 		$requete->bindValue(1,$unNomClient);
 		$requete->bindValue(2,$unPrenomClient);
@@ -114,6 +114,8 @@ class accesBD
 		$requete->bindValue(4,$uneDateAbonnement);
 		$requete->bindValue(5,$unLoginClient);
 		$requete->bindValue(6,$unPwdClient);
+		$requete->bindValue(7,0);
+
 		//exécution de la requête SQL
 		if(!$requete->execute())
 		{
@@ -311,6 +313,42 @@ class accesBD
 
 			return $stringQuery.";";
 		}
+
+		private function specialCaseWhere($stringQuery,$uneTable,$condition,$uneColonne)
+		{
+			$uneTable = strtoupper($uneTable);
+			switch ($uneTable) {
+			case 'CLIENT':
+				$stringQuery.='CLIENT'.' '.$condition."'".$uneColonne."'";
+				break;
+			case 'GENRE':
+				$stringQuery.='GENRE'.' '.$condition."'".$uneColonne."'";
+				break;
+			case 'SUPPORT':
+				$stringQuery.='SUPPORT'.' '.$condition."'".$uneColonne."'";
+				break;
+			case 'FILM':
+				$stringQuery.='FILM'.' '.$condition."'".$uneColonne."'";
+				break;
+			case 'SERIE':
+				$stringQuery.='SERIE'.' '.$condition."'".$uneColonne."'";
+				break;
+			case 'SAISON':	
+				$stringQuery.='SAISON'.' '.$condition."'".$uneColonne."'";
+				break;
+			case 'EPISODE':	
+				$stringQuery.='EPISODE'.' '.$condition."'".$uneColonne."'";
+				break;
+			case 'EMPRUNT':	
+				$stringQuery.='EMPRUNT'.' '.$condition."'".$uneColonne."'";
+				break;
+			default:
+				die('Pas une table valide');
+				break;
+			}
+
+			return $stringQuery.";";
+		}
 	
 	
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -399,6 +437,37 @@ class accesBD
 		{
 			die('Erreur sur donneProchainIdentifiantEpisode : '+$requete->errorCode());
 		}
+		}
+
+		public function donneActifDepuisLogin($uneTable,$unLogin)
+		{
+		//$prochainId[0]=0;
+		//définition de la requête SQL
+		$stringQuery = $this->specialCaseWhere("SELECT actif FROM ",$uneTable," WHERE login = ",$unLogin);
+		echo $stringQuery;
+		$requete = $this->conn->prepare($stringQuery);
+		$requete->bindValue(1,$unLogin);
+
+		echo "<br>La requete renvoi ".$requete->execute().'<br>';
+		$vretour = $requete->execute();
+		return $vretour;
+/*
+		//exécution de la requête SQL
+		if($requete->execute())
+		{
+			$nb=0;
+			//Retourne le prochain identifiant
+			while($row = $requete->fetch(PDO::FETCH_NUM))
+			{
+
+				$nb = $row[0];
+			}
+			return $nb+1;
+		}
+		else
+		{
+			die('Erreur sur donneActifDepuisLogin : '+$requete->errorCode());
+		}*/
 		}	
 	}
 
