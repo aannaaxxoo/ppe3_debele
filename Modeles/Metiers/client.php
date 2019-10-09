@@ -53,7 +53,9 @@ Class client
 	{
 		return $this->pwdClient;
 	}
-	
-	}
+	public function setPwd($pwd){
+        $this->pwdClient = $pwd;
+    }
+}
 	
 ?>

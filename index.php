@@ -7,6 +7,35 @@ function chargerPage()
 	$monControleur = new Controleur();
 	$monControleur->afficheEntete();
 	
+
+			/*if(!$_GET['emailOubliMotDePasse'] == ''){
+				echo "envoi de mail à : ".$_GET['emailOubliMotDePasse'];
+				$destinataire = $_GET['emailOubliMotDePasse'];
+				// Pour les champs $expediteur / $copie / $destinataire, séparer par une virgule s'il y a plusieurs adresses
+				$expediteur = 'joseph.ppe3@gmail.com';
+				$copie = 'joseph.ppe3@gmail.com';
+				$copie_cachee = 'joseph.ppe3@gmail.com';
+				$objet = 'Test'; // Objet du message
+				$headers  = 'MIME-Version: 1.0' . "\n"; // Version MIME
+				$headers .= 'Reply-To: '.$expediteur."\n"; // Mail de reponse
+				$headers .= 'From: "Nom_de_expediteur"<'.$expediteur.'>'."\n"; // Expediteur
+				$headers .= 'Delivered-to: '.$destinataire."\n"; // Destinataire
+				//$headers .= 'Cc: '.$copie."\n"; // Copie Cc
+				//$headers .= 'Bcc: '.$copie_cachee."\n\n"; // Copie cachée Bcc        
+				$message = 'Hihi coucou coucou!';
+				if (mail($destinataire, $objet, $message, $headers)) // Envoi du message
+				{
+				    echo 'Votre message a bien été envoyé ';
+				}
+				else // Non envoyé
+				{
+				    echo "Votre message n'a pas pu être envoyé";
+				}
+			}*/
+
+
+
+
 		if(isset($_GET['login']) && isset($_GET['password']))
 		{	echo "je suis dans le remplissage du login";    
 		    $_SESSION['login'] = $_GET['login'];
@@ -92,6 +121,13 @@ function chargerPage()
                                             <input type='hidden' name='action' value='verifLogin'/>
                                             <input class='btn btn-secondary mx-auto' type='submit' value='Accéder'/>
                                         </form>
+
+                                        <form action = 'index.php' method=GET>
+                                        	<input type='hidden' name='vue' value='compte'>
+                                            <input type='hidden' name='action' value='changementMdp'/>
+                                            <input class='btn btn-secondary' type='submit' value='Mot de passe oublié'/>
+                                        </form>
+
                                     </td>
                                     <td class='justify-content-center td-table'>
                                         <form action = 'index.php' method=GET>

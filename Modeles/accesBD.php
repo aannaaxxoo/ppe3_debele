@@ -106,7 +106,7 @@ class accesBD
 		//génération automatique de l'identifiant
 		$sonId = $this->donneProchainIdentifiant("client","idClient");
 		
-		$requete = $this->conn->prepare("INSERT INTO CLIENT (nomClient,prenomClient, emailClient, dateAbonnementClient,login, pwd,actif) VALUES (?,?,?,?,?,?,0)");
+		$requete = $this->conn->execute("INSERT INTO CLIENT (nomClient,prenomClient, emailClient, dateAbonnementClient,login, pwd,actif) VALUES (?,?,?,?,?,?,0)");
 		//définition de la requête SQL
 		$requete->bindValue(1,$unNomClient);
 		$requete->bindValue(2,$unPrenomClient);
@@ -114,7 +114,6 @@ class accesBD
 		$requete->bindValue(4,$uneDateAbonnement);
 		$requete->bindValue(5,$unLoginClient);
 		$requete->bindValue(6,$unPwdClient);
-		$requete->bindValue(7,0);
 
 		//exécution de la requête SQL
 		if(!$requete->execute())
@@ -125,6 +124,7 @@ class accesBD
 		//retour de l'identifiant du nouveau tuple
 		return $sonId;
 		}
+
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//---------------------------CREATION DE LA REQUETE D'INSERTION DES GENRES------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -321,36 +321,41 @@ class accesBD
 			case 'CLIENT':
 				$stringQuery.='CLIENT'.' '.$condition."'".$uneColonne."'";
 				break;
-			case 'GENRE':
-				$stringQuery.='GENRE'.' '.$condition."'".$uneColonne."'";
-				break;
-			case 'SUPPORT':
-				$stringQuery.='SUPPORT'.' '.$condition."'".$uneColonne."'";
-				break;
-			case 'FILM':
-				$stringQuery.='FILM'.' '.$condition."'".$uneColonne."'";
-				break;
-			case 'SERIE':
-				$stringQuery.='SERIE'.' '.$condition."'".$uneColonne."'";
-				break;
-			case 'SAISON':	
-				$stringQuery.='SAISON'.' '.$condition."'".$uneColonne."'";
-				break;
-			case 'EPISODE':	
-				$stringQuery.='EPISODE'.' '.$condition."'".$uneColonne."'";
-				break;
-			case 'EMPRUNT':	
-				$stringQuery.='EMPRUNT'.' '.$condition."'".$uneColonne."'";
-				break;
+			
 			default:
 				die('Pas une table valide');
 				break;
 			}
-
 			return $stringQuery.";";
+		}	
+
+		public function modifierPasswordClient($unMail, $newPassword)
+		{
+		$requete="update client
+				  set pwd = '".$newPassword."' where emailClient = '".$unMail."'";
+		$result = $this->conn->query($requete);
+		echo '<br>la requete est '.$requete.'<br>';
+		
+		if ($result)
+    	{
+    		return (1);
+   		}
+    	return 0;
+
+
+		//UPDATE table SET nom_colonne_1 = 'nouvelle valeur' WHERE condition
+		/*$stringQuery = $this->conn->specialCaseModifierPassword("UPDATE CLIENT SET pwd = ".$newPassword." WHERE emailClient = ".$unMail );
+		//$requete = $this->conn->prepare("UPDATE CLIENT SET pwd = :newPassword WHERE emailClient = :unMail");
+		//exécution de la requête SQL
+		$requete = $this->conn->prepare($stringQuery);
+		echo 'la requete:'.$requete->execute();
+		$requete->execute();
+		/*if(!$requete->execute())
+		{
+			die("Erreur dans modifierPasswordClient : ".$requete->errorCode());
 		}
-	
-	
+		return $requete;*/
+		}
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-----------------------------DONNE LE PROCHAIN INDENTIFIANT---------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

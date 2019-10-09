@@ -3,12 +3,10 @@
 		<meta charset="UTF-8">
 	</HEAD>
 	<BODY>
-			<?php 
-			echo "</br>";
-				echo "L'ajout de votre compte a bien ete pris en compte, merci !<br><br>";
-				echo "</br>";
-				echo "<a href='javascript:history.go(-1)'>Retour</a>";
-				echo "</br>";
-			?>	
+		<FORM action = 'index.php' method = 'post'>
+				Votre demande a bien été prise en compte<br>
+				<INPUT type = 'submit' value = 'Valider'/>
+		</FORM>
+			
 	</BODY>
 </HTML>

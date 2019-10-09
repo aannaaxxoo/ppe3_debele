@@ -341,13 +341,24 @@ Class gestionVideo
 	
 	//METHODE DONNANT LE PROCHAIN INDENTIFIANT----------------------------------------------------------------	
 	public function donneProchainIdentifiant($uneTable,$unIdentifiant)
-	{
+		{
 		return $this->maBD->donneProchainIdentifiant($uneTable,$unIdentifiant);
-	}
+		}
 
 	public function donneActifDepuisLogin($uneTable,$unLogin)
 		{
 		return $this->maBD->donneActifDepuisLogin($uneTable,$unLogin);
+
+		}
+
+	public function genererChaineAleatoire($longueur, $listeCar = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'){
+	return $this->tousLesClients->genererChaineAleatoire($longueur, $listeCar = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+		}
+
+	public function modifierPasswordClient($unMail, $newPassword)
+		{
+			return $this->maBD->modifierPasswordClient($unMail, $newPassword);
+			return $this->tousLesClients->modifierPasswordClient($unMail, $newPassword);
 		}
 }
 	

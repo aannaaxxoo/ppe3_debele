@@ -68,9 +68,7 @@ class Controleur
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	public function affichePage($action,$vue)
 		{
-	    //CONTROLE DU COMPTE ACTIF HEHE
-		
-		
+		echo "action: ".$action."<br>vue: ".$vue;
 		//SELON la vue demandée
 		switch ($vue)
 			{
@@ -91,8 +89,7 @@ class Controleur
 				break;
 			}
 		}
-			
-			
+				
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//----------------------------Mon Compte--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -114,6 +111,7 @@ class Controleur
 				// ici il faut pouvoir modifier le mot de passe de l'utilisateur
 				require 'Vues/construction.php';
 				break;
+
 			//CAS ajouter un utilisateur ------------------------------------------------------------------------------
 			case 'nouveauLogin' :
 				// ici il faut pouvoir recuperer un nouveau utilisateur
@@ -153,8 +151,51 @@ class Controleur
         				
         				mail($unEmailClient, 'Sujet', $message1, $headers1);*/		    
     				require 'Vues/enregistrer.php';
-			} 
+				} 
 				break;
+
+			case 'changementMdp' :
+				require 'Vues/changementMdp.php';
+				break;
+
+			case 'envoiMail' :
+				$destinataire = $_GET['emailOubliMotDePasse'];
+
+				if (filter_var($destinataire, FILTER_VALIDATE_EMAIL)) //et que l'adresse est dans la BDD
+				{
+					echo '<br>preparation de la requete UPDATE...<br>';
+					$newPassword = $this->maVideotheque->genererChaineAleatoire(8); //génération du nouveau mot de passe
+					$this->maVideotheque->modifierPasswordClient($destinataire, $newPassword);
+
+
+				    echo "<br>L'adresse email ".$destinataire." est considérée comme valide.<br>";
+				
+				    //CREATION DU MAIL
+					$expediteur = 'joseph.ppe3@gmail.com';
+					$objet = 'PPE-FLIX | Demande de changement de votre mot de passe'; // Objet du message
+					$headers  = 'MIME-Version: 1.0' . "\n"; // Version MIME
+					$headers .= 'Reply-To: '.$expediteur."\n"; // Mail de reponse
+					$headers .= 'From: "Nom_de_expediteur"<'.$expediteur.'>'."\n"; // Expediteur
+					$headers .= 'Delivered-to: '.$destinataire."\n"; // Destinataire      
+					$message = 'Bonjour
+					Vous avez effectué une demande de changement de mot de passe sur PPE-FLIX 
+					Votre nouveau mot de passe est : '.$newPassword;
+					mail($destinataire, $objet, $message, $headers); // Envoi du message
+				} 
+				else 
+				{
+				    echo "<br>L'Adresse email ".$email." est considérée comme invalide.<br>";
+				}
+				require 'Vues/enregistrer.php';
+				break;
+
+/*
+
+				if(!$_GET['emailOubliMotDePasse'] == ''){
+
+				}*/
+
+				
 
 	
 			//CAS verifier un utilisateur ------------------------------------------------------------------------------

@@ -76,11 +76,11 @@ Class conteneurClient
 		return $leBonClient;
 		}
 
-		/*public function donneActifClientDepuisLogin($unLoginClient)
+		/*public function donneObjetClientDepuisMail($unMailClient)
 		{
 		//initialisation d'un booléen (on part de l'hypothèse que le client n'existe pas)
 		$trouve=false;
-		$monActif=null;
+		$monMail=null;
 		//création d'un itérateur sur la collection lesClients
 		$iClient = $this->lesClients->getIterator();
 		//TQ on a pas trouvé le client et que l'on est pas arrivé au bout de la collection
@@ -135,6 +135,25 @@ Class conteneurClient
 			}
 		return $trouve;
 	}
+
+	public function genererChaineAleatoire($longueur, $listeCar = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+	{
+	 $chaine = '';
+	 $max = mb_strlen($listeCar, '8bit') - 1;
+	 for ($i = 0; $i < $longueur; ++$i) {
+	 $chaine .= $listeCar[random_int(0, $max)];
+	 }
+	 return $chaine;
 	}
-	
+
+	public function modifierPasswordClient($unMail, $newPassword){
+		foreach($this->lesClients as $unClient)
+		{
+			if($unMail == $unClient->getEmailClient())
+			{
+				$unClient->setPwd($newPassword);
+			}
+		}
+	}
+	}
 ?> 
