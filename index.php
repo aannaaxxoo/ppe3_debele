@@ -33,18 +33,15 @@ function chargerPage()
 				}
 			}*/
 
-
-
-
 		if(isset($_GET['login']) && isset($_GET['password']))
-		{	echo "je suis dans le remplissage du login";    
+		{	echo "<br>je suis dans le remplissage du login";    
 		    $_SESSION['login'] = $_GET['login'];
 		    $_SESSION['password'] = $_GET['password'];
 		}
 		
 		if(isset($_SESSION['login']) && isset($_SESSION['password']))
-		{ 	echo "la session existe";
-		    if ((isset($_GET['vue']))&& (isset($_GET['action'])))
+		{ 	echo "<br>la session existe";
+		    if ((isset($_GET['vue'])) && (isset($_GET['action'])))
 				{   
 				    echo $_GET['action']; 
 				    echo $_GET['vue'];
@@ -53,20 +50,21 @@ function chargerPage()
 		}
 		else
 		{
-			echo "pas de session";
-			if ((isset($_GET['vue']))&& (isset($_GET['action'])))
+			echo "<br>pas de session";
+			if ((isset($_GET['vue'])) && (isset($_GET['action'])))
 			{   
-					echo "je crée un nouvel utilisateur";
-					$monControleur->affichePage($_GET['action'],$_GET['vue']);
+				echo "<br>je crée un nouvel utilisateur";
+				$monControleur->affichePage($_GET['action'],$_GET['vue']);
 			}
 			else
 			{
-				echo "je viens d arriver";
+				echo "<br>je viens d arriver";
 				premier_affichage();
-			}
+			}		
 		}
 	$monControleur->affichePiedPage();
 }
+
 	function premier_affichage()
 	{
 		/*echo "<div class = 'centrePage'>
@@ -135,8 +133,8 @@ function chargerPage()
                                             <input class='form-group' type='text' name='prenomClient' placeholder='Saisir votre prenom'/><br>
                                             <input class='form-group' type='text' name='emailClient' placeholder='Saisir votre email'/><br>
                                             <input class='form-group' type='date' name='dateAbonnementClient' placeholder='Date souhaitée d abonnement'/><br>
-                                            <input class='form-group' type='text' name='login' placeholder='Saisir votre login'/><br>
-                                            <input class='form-group' type='password' name='password' placeholder='Choisir un mot de passe'/><br>
+                                            <input class='form-group' type='text' name='loginInscription' placeholder='Saisir votre login'/><br>
+                                            <input class='form-group' type='password' name='passwordInscription' placeholder='Choisir un mot de passe'/><br>
                                             <input type='hidden' name='vue' value='compte'>
                                             <input type='hidden' name='action' value='nouveauLogin'/>
                                             <input class='btn btn-secondary' type='submit' value='Accéder'/>
@@ -147,8 +145,5 @@ function chargerPage()
                     </div>
                 </div>";
 	}
-
 	chargerPage();
-
-
 ?>

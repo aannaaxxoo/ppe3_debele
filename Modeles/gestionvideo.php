@@ -360,6 +360,35 @@ Class gestionVideo
 			return $this->maBD->modifierPasswordClient($unMail, $newPassword);
 			return $this->tousLesClients->modifierPasswordClient($unMail, $newPassword);
 		}
+
+	public function donneInformationsSelonLogin($unLogin)
+	{
+		return $this->tousLesClients->donneInformationsSelonLogin($unLogin);
+	}
+
+	public function modifierNomClient($unLogin, $nouveauNom)
+	{
+		return $this->maBD->modifierNomClient($unLogin, $nouveauNom);
+		return $this->tousLesClients->modifierNomClient($unLogin, $nouveauNom);
+	}
+
+	public function modifierPrenomClient($unLogin, $nouveauPrenom)
+	{
+		return $this->maBD->modifierPrenomClient($unLogin, $nouveauPrenom);
+		return $this->tousLesClients->modifierPrenomClient($unLogin, $nouveauPrenom);
+	}
+
+	public function modifierEmailClient($unLogin, $nouveauEmail)
+	{
+		return $this->maBD->modifierEmailClient($unLogin, $nouveauEmail);
+		return $this->tousLesClients->modifierEmailClient($unLogin, $nouveauEmail);
+	}
+
+	public function modifierMdpClient($unLogin, $nouveauMdp)
+	{
+		return $this->maBD->modifierMdpClient($unLogin, $nouveauMdp);
+		return $this->tousLesClients->modifierMdpClient($unLogin, $nouveauMdp);
+	}
 }
 	
 ?>

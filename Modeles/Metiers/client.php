@@ -56,6 +56,17 @@ Class client
 	public function setPwd($pwd){
         $this->pwdClient = $pwd;
     }
+    public function setNom($nom){
+        $this->nomClient = $nom;
+    }
+    public function setPrenom($prenom){
+        $this->prenomClient = $prenom;
+    }
+    public function setEmail($email){
+        $this->emailClient = $email;
+    }
+
+
 }
 	
 ?>

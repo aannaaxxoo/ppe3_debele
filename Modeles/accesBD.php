@@ -106,7 +106,7 @@ class accesBD
 		//génération automatique de l'identifiant
 		$sonId = $this->donneProchainIdentifiant("client","idClient");
 		
-		$requete = $this->conn->execute("INSERT INTO CLIENT (nomClient,prenomClient, emailClient, dateAbonnementClient,login, pwd,actif) VALUES (?,?,?,?,?,?,0)");
+		$requete = $this->conn->prepare("INSERT INTO CLIENT (nomClient,prenomClient, emailClient, dateAbonnementClient,login, pwd,actif) VALUES (?,?,?,?,?,?,0)");
 		//définition de la requête SQL
 		$requete->bindValue(1,$unNomClient);
 		$requete->bindValue(2,$unPrenomClient);
@@ -331,30 +331,68 @@ class accesBD
 
 		public function modifierPasswordClient($unMail, $newPassword)
 		{
-		$requete="update client
-				  set pwd = '".$newPassword."' where emailClient = '".$unMail."'";
-		$result = $this->conn->query($requete);
-		echo '<br>la requete est '.$requete.'<br>';
-		
-		if ($result)
-    	{
-    		return (1);
-   		}
-    	return 0;
-
-
-		//UPDATE table SET nom_colonne_1 = 'nouvelle valeur' WHERE condition
-		/*$stringQuery = $this->conn->specialCaseModifierPassword("UPDATE CLIENT SET pwd = ".$newPassword." WHERE emailClient = ".$unMail );
-		//$requete = $this->conn->prepare("UPDATE CLIENT SET pwd = :newPassword WHERE emailClient = :unMail");
-		//exécution de la requête SQL
-		$requete = $this->conn->prepare($stringQuery);
-		echo 'la requete:'.$requete->execute();
-		$requete->execute();
-		/*if(!$requete->execute())
-		{
-			die("Erreur dans modifierPasswordClient : ".$requete->errorCode());
+			$requete="update client
+					  set pwd = '".$newPassword."' where emailClient = '".$unMail."'";
+			$result = $this->conn->query($requete);
+			echo '<br>la requete est '.$requete.'<br>';
+			
+			if ($result)
+	    	{
+	    		return (1);
+	   		}
+	    	return 0;
 		}
-		return $requete;*/
+
+		public function modifierNomClient($unLogin, $nouveauNom)
+		{
+			$requete="update client
+					  set nomClient = '".$nouveauNom."' where login = '".$unLogin."'";;
+			$result = $this->conn->query($requete);
+			echo '<br>la requete est '.$requete.'<br>';
+			if ($result)
+	    	{
+	    		return (1);
+	   		}
+	    	return 0;
+		}
+
+		public function modifierPrenomClient($unLogin, $nouveauPrenom)
+		{
+			$requete="update client
+					  set prenomClient = '".$nouveauPrenom."' where login = '".$unLogin."'";
+			$result = $this->conn->query($requete);
+			echo '<br>la requete est '.$requete.'<br>';	
+			if ($result)
+	    	{
+	    		return (1);
+	   		}
+	    	return 0;
+		}
+
+		public function modifierEmailClient($unLogin, $nouveauEmail)
+		{
+			$requete="update client
+					  set emailClient = '".$nouveauEmail."' where login = '".$unLogin."'";
+			$result = $this->conn->query($requete);
+			echo '<br>la requete est '.$requete.'<br>';
+			if ($result)
+	    	{
+	    		return (1);
+	   		}
+	    	return 0;
+		}
+
+		public function modifierMdpClient($unLogin, $nouveauMdp)
+		{
+			$requete="update client
+					  set pwd = '".$nouveauMdp."' where login = '".$unLogin."'";
+			$result = $this->conn->query($requete);
+			echo '<br>la requete est '.$requete.'<br>';
+			if ($result)
+	    	{
+	    		return (1);
+	   		}
+	    	return 0;
 		}
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-----------------------------DONNE LE PROCHAIN INDENTIFIANT---------------------------------------------------------------------------------------------------------------------------------------------------------------

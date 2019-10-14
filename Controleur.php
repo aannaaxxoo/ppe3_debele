@@ -10,7 +10,6 @@ class Controleur
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	private $maVideotheque;
 	
-	
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//---------------------------CONSTRUCTEUR------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -38,7 +37,6 @@ class Controleur
 				echo 'Votre compte est bien à jour';
 			}	
 		}
-
 		require 'Vues/entete.php';
 		}
 		
@@ -68,7 +66,7 @@ class Controleur
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	public function affichePage($action,$vue)
 		{
-		echo "action: ".$action."<br>vue: ".$vue;
+		echo "<br>action: ".$action."<br>vue: ".$vue;
 		//SELON la vue demandée
 		switch ($vue)
 			{
@@ -103,14 +101,53 @@ class Controleur
 			//CAS visualisation de mes informations-------------------------------------------------------------------------------------------------
 			case 'visualiser' :
 				//ici il faut pouvoir avoir accès au information de l'internaute connecté
-				require 'Vues/construction.php';
+				echo '<br><br>coucou';
+				$login = $_SESSION['login'];
+				echo $login;
+				$_SESSION['afficherInformationsCompte'] = $this->maVideotheque->donneInformationsSelonLogin($login);
+				require 'Vues/voirCompte.php';
 				break;
 				
 			//CAS enregistrement d'une modification sur le compte------------------------------------------------------------------------------
 			case 'modifier' :
 				// ici il faut pouvoir modifier le mot de passe de l'utilisateur
-				require 'Vues/construction.php';
+				require 'Vues/modifierCompte.php';
 				break;
+
+			case 'confirmerModificationCompte' :
+				$nouveauPrenom = $_POST['nouveauPrenom'];
+				$nouveauNom = $_POST['nouveauNom'];
+				$nouveauEmail = $_POST['nouveauEmail'];
+				$mdpActuel = $_POST['mdpActuel'];
+				$nouveauMdp = $_POST['nouveauMdp'];
+				$confirmationNouveauMdp = $_POST['confirmationNouveauMdp'];
+				echo "<br>les modifications sont:".$nouveauPrenom." ".$nouveauNom." ".$nouveauEmail." ".$mdpActuel." ".$nouveauMdp." ".$confirmationNouveauMdp;
+				echo "longueur prenom ".strlen($nouveauMdp);
+				if($nouveauPrenom != "" && strlen($nouveauPrenom) > 2 && strlen($nouveauPrenom) < 50)
+					{ 
+						$this->maVideotheque->modifierPrenomClient($_SESSION['login'], $nouveauPrenom); 
+					}
+
+				if($nouveauNom != "" && strlen($nouveauNom) > 2 && strlen($nouveauNom) < 50)
+					{ 
+						$this->maVideotheque->modifierNomClient($_SESSION['login'], $nouveauNom); 
+					}
+
+				if($nouveauEmail != "" && filter_var($nouveauEmail, FILTER_VALIDATE_EMAIL)) {
+					
+						$this->maVideotheque->modifierEmailClient($_SESSION['login'], $nouveauEmail); 
+					}
+					
+				if($nouveauMdp != "" && strlen($nouveauMdp) > 2 && strlen($nouveauMdp) < 50
+					&& $nouveauMdp == $confirmationNouveauMdp
+					&& $mdpActuel == $_SESSION['password'])
+					{ 
+						echo 'ce mot de passe est modifié bitch';
+						$this->maVideotheque->modifierMdpClient($_SESSION['login'], $nouveauMdp); 
+					}
+				require 'Vues/enregistrer.php';
+				break;
+
 
 			//CAS ajouter un utilisateur ------------------------------------------------------------------------------
 			case 'nouveauLogin' :
@@ -119,17 +156,17 @@ class Controleur
 				$unNomClient=$_GET['nomClient'];
 				$unEmailClient=$_GET['emailClient'];
 				$uneDateAbonnementClient=$_GET['dateAbonnementClient'];
-				$unLogin=$_GET['login'];
-				$unPassword=$_GET['password'];
-							
-				if($this->maVideotheque->verifLogin($unLogin, $unPassword) == 1 || empty($unLogin) || empty($unPassword)) //  || 
+				$unLogin=$_GET['loginInscription'];
+				$unPassword=$_GET['passwordInscription'];			
+				if($this->maVideotheque->verifLogin($unLogin, $unPassword) == 1 || empty($unLogin) || empty($unPassword))
 				{
 				    echo "ERREUR LORS DE L'INSCRIPTION";			    
 				}
 				else 
 				{
     				$unIdClient=$this->maVideotheque->donneProchainIdentifiant('CLIENT','idClient');
-    				$this->maVideotheque->ajouteUnClient($unNomClient, $unPrenomClient, $unEmailClient, $uneDateAbonnementClient, $unLogin, $unPassword, $unIdClient);				
+    				$this->maVideotheque->ajouteUnClient($unNomClient, $unPrenomClient, $unEmailClient, 
+    					$uneDateAbonnementClient, $unLogin, $unPassword, $unIdClient);				
     				/*
         				//ENVOI DU MAIL A L'ADMIN
         				$headers1 ='From: message automatique\n';
@@ -160,7 +197,6 @@ class Controleur
 
 			case 'envoiMail' :
 				$destinataire = $_GET['emailOubliMotDePasse'];
-
 				if (filter_var($destinataire, FILTER_VALIDATE_EMAIL)) //et que l'adresse est dans la BDD
 				{
 					echo '<br>preparation de la requete UPDATE...<br>';
@@ -189,15 +225,6 @@ class Controleur
 				require 'Vues/enregistrer.php';
 				break;
 
-/*
-
-				if(!$_GET['emailOubliMotDePasse'] == ''){
-
-				}*/
-
-				
-
-	
 			//CAS verifier un utilisateur ------------------------------------------------------------------------------
 			case 'verifLogin' :
 				// ici il faut pouvoir vérifier un login un nouveau utilisateur
@@ -206,7 +233,6 @@ class Controleur
 				$unLogin=$_GET['login'];
 				$unPassword=$_GET['password'];
 				$resultat=$this->maVideotheque->verifLogin($unLogin, $unPassword);	
-
 				//si le client existe alors j'affiche le menu et la page visuGenre.php
 				if($resultat==1)
 				{
@@ -226,7 +252,13 @@ class Controleur
 							</div>
 							<meta http-equiv='refresh' content='1;index.php'>";
 				}
-				break;				
+				break;	
+
+			case 'retourAccueil':
+				echo "vous etes connecte";
+				require 'index.php';
+				echo $this->maVideotheque->listeLesGenres();					
+				break;
 			}
 		}
 	

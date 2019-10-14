@@ -146,7 +146,8 @@ Class conteneurClient
 	 return $chaine;
 	}
 
-	public function modifierPasswordClient($unMail, $newPassword){
+	public function modifierPasswordClient($unMail, $newPassword)
+	{
 		foreach($this->lesClients as $unClient)
 		{
 			if($unMail == $unClient->getEmailClient())
@@ -155,5 +156,66 @@ Class conteneurClient
 			}
 		}
 	}
+
+	public function modifierPrenomClient($unLogin, $nouveauPrenom)
+	{
+		foreach($this->lesClients as $unClient)
+		{
+			if($unLogin == $unClient->getLoginClient())
+			{
+				$unClient->setPrenom($nouveauPrenom);
+			}
+		}
 	}
+
+	public function modifierNomClient($unLogin, $nouveauNom)
+	{
+		foreach($this->lesClients as $unClient)
+		{
+			if($unLogin == $unClient->getLoginClient())
+			{
+				$unClient->setNom($nouveauNom);
+			}
+		}
+	}
+
+	public function modifierEmailClient($unLogin, $nouveauEmail)
+	{
+		foreach($this->lesClients as $unClient)
+		{
+			if($unLogin == $unClient->getLoginClient())
+			{
+				$unClient->setEmail($nouveauEmail);
+			}
+		}
+	}
+
+	public function modifierMdpClient($unLogin, $nouveauMdp)
+	{
+		foreach($this->lesClients as $unClient)
+		{
+			if($unLogin == $unClient->getLoginClient())
+			{
+				$unClient->setPwd($nouveauMdp);
+			}
+		}
+	}
+
+    public function donneInformationsSelonLogin($unLogin)
+    {
+    	$var = "";
+    	foreach($this->lesClients as $unClient)
+		{
+			if($unLogin == $unClient->getLoginClient())
+			{
+				$var= "<u><b>Adresse e-mail :</b></u> ".$unClient->getEmailClient()."<br><br>
+				<u><b>Informations personnelles :</b></u><br>
+				Nom : ".$unClient->getNomClient()."<br>
+				Prénom : ".$unClient->getPrenomClient()."<br>
+				Vous êtes abonné depuis le ".$unClient->getDateAbonnementClient();
+			}
+		}
+		return $var;
+	}
+}
 ?> 
