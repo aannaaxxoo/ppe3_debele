@@ -122,7 +122,7 @@ function chargerPage()
 
                                         <form action = 'index.php' method=GET>
                                         	<input type='hidden' name='vue' value='compte'>
-                                            <input type='hidden' name='action' value='changementMdp'/>
+                                            <input type='hidden' name='action' value='oubliMdp'/>
                                             <input class='btn btn-secondary' type='submit' value='Mot de passe oublié'/>
                                         </form>
 

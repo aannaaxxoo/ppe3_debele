@@ -157,9 +157,9 @@ Class gestionVideo
 				$unClient = $this->tousLesClients->donneObjetClientDepuisNumero($resultat[$nb][2]);
 				$this->tousLesEmprunts->mettreUnEmpruntEnPlus($resultat[$nb][0], $resultat[$nb][1],$unClient,$leSupport);
 			    $nb++;
-			}
-			
+			}	
 		}
+		
 //METHODE QUI VERIF LE LOGIN ET LE PASSWORD DE L UTILISATEUR
 	public function verifLogin($unLogin, $unPassword)
 	{
@@ -167,10 +167,6 @@ Class gestionVideo
 		return $resultat;
 	}			
 		
-
-
-
-
 //METHODE INSERANT UN CLIENT----------------------------------------------------------------------------------------------------------
 	public function ajouteUnClient($unNomClient, $unPrenomClient, $unEmailClient, $uneDateAbonnement, $unLogin, $unPassword, $unIdClient)
 		{
@@ -345,10 +341,9 @@ Class gestionVideo
 		return $this->maBD->donneProchainIdentifiant($uneTable,$unIdentifiant);
 		}
 
-	public function donneActifDepuisLogin($uneTable,$unLogin)
+	public function donneActifDepuisLogin($unLogin)
 		{
-		return $this->maBD->donneActifDepuisLogin($uneTable,$unLogin);
-
+		return $this->maBD->donneActifDepuisLogin($unLogin);
 		}
 
 	public function genererChaineAleatoire($longueur, $listeCar = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'){

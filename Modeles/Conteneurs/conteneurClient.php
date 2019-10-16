@@ -102,7 +102,7 @@ Class conteneurClient
 		return $monActif;*/
 
 
-	public function verificationExistanceClient($unLogin, $unPassword)
+	public function verificationExistanceClient($unLogin, $unPassword  )
 	{
 		//echo $unLogin."<br/>";
 		//echo $unPassword."<br/>";

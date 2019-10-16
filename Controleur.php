@@ -25,17 +25,9 @@ class Controleur
 	public function afficheEntete()
 		{
 		//appel de la vue de l'entête
-
 		if(isset($_SESSION['login']) && isset($_SESSION['password']))
-		{
-			$login = $_SESSION['login'];
-			echo 'login :'.$login.'<br>';
-			$actif = $this->maVideotheque->donneActifDepuisLogin('CLIENT',$login);
-			echo 'actif: '.$actif;
-			if($actif == 0){	
-				echo '<img src="Images/alert.png" alt="Alerte">';
-				echo 'Votre compte est bien à jour';
-			}	
+		{ 	
+			echo "<br>La personne connecté est ".$_SESSION['login']."<br>";
 		}
 		require 'Vues/entete.php';
 		}
@@ -121,32 +113,101 @@ class Controleur
 				$mdpActuel = $_POST['mdpActuel'];
 				$nouveauMdp = $_POST['nouveauMdp'];
 				$confirmationNouveauMdp = $_POST['confirmationNouveauMdp'];
-				echo "<br>les modifications sont:".$nouveauPrenom." ".$nouveauNom." ".$nouveauEmail." ".$mdpActuel." ".$nouveauMdp." ".$confirmationNouveauMdp;
-				echo "longueur prenom ".strlen($nouveauMdp);
-				if($nouveauPrenom != "" && strlen($nouveauPrenom) > 2 && strlen($nouveauPrenom) < 50)
-					{ 
-						$this->maVideotheque->modifierPrenomClient($_SESSION['login'], $nouveauPrenom); 
-					}
+				/*echo "<br>les modifications sont:".$nouveauPrenom." ".$nouveauNom." ".$nouveauEmail." ".$mdpActuel." ".$nouveauMdp." ".$confirmationNouveauMdp;
+				echo "longueur prenom ".strlen($nouveauMdp);*/
 
-				if($nouveauNom != "" && strlen($nouveauNom) > 2 && strlen($nouveauNom) < 50)
-					{ 
-						$this->maVideotheque->modifierNomClient($_SESSION['login'], $nouveauNom); 
-					}
+				$erreur ="<br>ERREUR<br>";
+				$aModifieAuMoinsUnParametre = false;
+				$actif  = $this->maVideotheque->donneActifDepuisLogin($_SESSION['login']);
+				if($actif == 1) // si le compte est actif
+				{
+					echo 'Le compte est actif';
+					if($nouveauPrenom != "" && strlen($nouveauPrenom) > 2 && strlen($nouveauPrenom) < 50)
+						{ 
+							$this->maVideotheque->modifierPrenomClient($_SESSION['login'], $nouveauPrenom);
+							$aModifieAuMoinsUnParametre = true;
+						}
+						else 
+						{
+							if($nouveauPrenom != "")
+							{
+								$erreur = $erreur."<br>- Le prénom saisi n'est pas valide.";
+								require 'Vues/modifierCompte.php';
+								echo $erreur;
+								break;
+							} 
+						}
 
-				if($nouveauEmail != "" && filter_var($nouveauEmail, FILTER_VALIDATE_EMAIL)) {
-					
-						$this->maVideotheque->modifierEmailClient($_SESSION['login'], $nouveauEmail); 
+					if($nouveauNom != "" && strlen($nouveauNom) > 2 && strlen($nouveauNom) < 50)
+						{ 
+							$this->maVideotheque->modifierNomClient($_SESSION['login'], $nouveauNom);
+							$aModifieAuMoinsUnParametre = true; 
+						}
+						else 
+						{
+							if($nouveauNom != "")
+							{
+								$erreur = $erreur."<br>- Le nom saisi n'est pas valide.";
+								require 'Vues/modifierCompte.php';
+								echo $erreur;
+								break;
+							} 
+						}
+
+					if($nouveauEmail != "" && filter_var($nouveauEmail, FILTER_VALIDATE_EMAIL)) 
+						{
+							$this->maVideotheque->modifierEmailClient($_SESSION['login'], $nouveauEmail); 
+							$aModifieAuMoinsUnParametre = true;
+						}
+						else 
+						{
+							if($nouveauEmail != "")
+							{
+								$erreur = $erreur."<br>- L'email saisi n'est pas valide.";
+								require 'Vues/modifierCompte.php';
+								echo $erreur;
+								break;
+							} 
+						}
+						
+					if($nouveauMdp != "" && strlen($nouveauMdp) > 2 && strlen($nouveauMdp) < 50
+						&& $nouveauMdp == $confirmationNouveauMdp
+						&& $mdpActuel == $_SESSION['password'])
+						{ 
+							$this->maVideotheque->modifierMdpClient($_SESSION['login'], $nouveauMdp); 
+							$aModifieAuMoinsUnParametre = true;
+						}
+						else 
+						{
+							if($nouveauMdp != "")
+							{
+								$erreur = $erreur."<br>- Le mot de passe saisi n'est pas valide.";
+								echo $erreur;
+								require 'Vues/modifierCompte.php';
+								break;
+							} 
+						}
+					if($aModifieAuMoinsUnParametre = false)
+					{
+						echo "<br>ERREUR<br>Aucune modification détectée.";
+						require 'Vues/modifierCompte.php'; 
+						break;		
 					}
-					
-				if($nouveauMdp != "" && strlen($nouveauMdp) > 2 && strlen($nouveauMdp) < 50
-					&& $nouveauMdp == $confirmationNouveauMdp
-					&& $mdpActuel == $_SESSION['password'])
-					{ 
-						echo 'ce mot de passe est modifié bitch';
-						$this->maVideotheque->modifierMdpClient($_SESSION['login'], $nouveauMdp); 
+					else
+					{
+						require 'Vues/enregistrer.php'; 
+						break;	
 					}
-				require 'Vues/enregistrer.php';
-				break;
+				}
+				else
+				{
+					$erreur = $erreur."<br>- VOTRE COMPTE N'EST PAS ACTIF.";
+					require 'Vues/modifierCompte.php';
+					echo $erreur;
+					break;
+				}
+				
+				
 
 
 			//CAS ajouter un utilisateur ------------------------------------------------------------------------------
@@ -167,32 +228,33 @@ class Controleur
     				$unIdClient=$this->maVideotheque->donneProchainIdentifiant('CLIENT','idClient');
     				$this->maVideotheque->ajouteUnClient($unNomClient, $unPrenomClient, $unEmailClient, 
     					$uneDateAbonnementClient, $unLogin, $unPassword, $unIdClient);				
-    				/*
-        				//ENVOI DU MAIL A L'ADMIN
-        				$headers1 ='From: message automatique\n';
-        				$headers1 .='Reply-To: joseph.ppe3@gmail.com'."\n";
-        				$headers1 .='Content-Type: text/html; charset="iso-8859-1"'."\n";
-        				$headers1 .='Content-Transfer-Encoding: 8bit';				
-        				$message1 ='<html><head><title>Inscription d\'un nouvel utilisateur</title></head>
-                        <body>Confirmation d\'inscription de l\'utilisateur '.$unNomClient.' '.$unPrenomClient.'</body></html>';   
-        				
-        				mail('joseph.ppe3@gmail.com', 'Sujet', $message1, $headers1);
-        				
-        				//ENVOI DU MAIL DE TRAITEMENT A L'UTILISATEUR
-        				$headers1 ='From: message automatique\n';
-        				$headers1 .='Reply-To: joseph.ppe3@gmail.com'."\n";
-        				$headers1 .='Content-Type: text/html; charset="iso-8859-1"'."\n";
-        				$headers1 .='Content-Transfer-Encoding: 8bit';
-        				$message1 ='<html><head><title>Votre inscription sera traitée dans les 24h</title></head>
-                        <body></body></html>';
-        				
-        				mail($unEmailClient, 'Sujet', $message1, $headers1);*/		    
+    				
+    				//ENVOI DU MAIL A L'UTILISATEUR
+					$expediteur = 'joseph.ppe3@gmail.com';
+					$objet = 'PPE-FLIX | Bienvenue sur notre plateforme !'; // Objet du message
+					$headers  = 'MIME-Version: 1.0' . "\n"; // Version MIME
+					$headers .= 'Reply-To: '.$expediteur."\n"; // Mail de reponse
+					$headers .= 'From: <'.$expediteur.'>'."\n"; // Expediteur
+					$headers .= 'Delivered-to: '.$unEmailClient."\n"; // Destinataire      
+					$message = 'Bienvenue sur PPE-FLIX ! 
+					A la réception de votre chèque, votre compte sera validé dans les plus brefs délais.
+					PPE-FLIX, 30 Boulevard Du Massacre, Nantes 44300';
+					mail($unEmailClient, $objet, $message, $headers); // Envoi du message
+    				
+
+    				//ENVOI DU MAIL A L'ADMIN
+					$expediteur = 'joseph.ppe3@gmail.com';
+					$objet = "Inscription d'un nouvel utilisateur"; // Objet du message
+					$headers  = 'MIME-Version: 1.0' . "\n"; // Version MIME
+					$headers .= 'Reply-To: '.$expediteur."\n"; // Mail de reponse
+					$headers .= 'From: <'.$expediteur.'>'."\n"; // Expediteur
+					$headers .= 'Delivered-to: '.$expediteur."\n"; // Destinataire      
+					$message = "Une nouvelle personne s'est inscrite sur PPE-FLIX.
+					- Nom:".$unNomClient." ".$unPrenomClient."
+					- Email:".$unEmailClient.".";
+					mail($expediteur, $objet, $message, $headers); // Envoi du message
     				require 'Vues/enregistrer.php';
 				} 
-				break;
-
-			case 'changementMdp' :
-				require 'Vues/changementMdp.php';
 				break;
 
 			case 'envoiMail' :
@@ -203,7 +265,6 @@ class Controleur
 					$newPassword = $this->maVideotheque->genererChaineAleatoire(8); //génération du nouveau mot de passe
 					$this->maVideotheque->modifierPasswordClient($destinataire, $newPassword);
 
-
 				    echo "<br>L'adresse email ".$destinataire." est considérée comme valide.<br>";
 				
 				    //CREATION DU MAIL
@@ -211,7 +272,7 @@ class Controleur
 					$objet = 'PPE-FLIX | Demande de changement de votre mot de passe'; // Objet du message
 					$headers  = 'MIME-Version: 1.0' . "\n"; // Version MIME
 					$headers .= 'Reply-To: '.$expediteur."\n"; // Mail de reponse
-					$headers .= 'From: "Nom_de_expediteur"<'.$expediteur.'>'."\n"; // Expediteur
+					$headers .= 'From: <'.$expediteur.'>'."\n"; // Expediteur
 					$headers .= 'Delivered-to: '.$destinataire."\n"; // Destinataire      
 					$message = 'Bonjour
 					Vous avez effectué une demande de changement de mot de passe sur PPE-FLIX 
@@ -236,12 +297,19 @@ class Controleur
 				//si le client existe alors j'affiche le menu et la page visuGenre.php
 				if($resultat==1)
 				{
+					
+					$actif  = $this->maVideotheque->donneActifDepuisLogin($unLogin);
+					echo '<br>Compte actif: '.$actif.'<br>';
+					if($actif == 0){	
+						echo '<img src="Images/alert.png" alt="Alerte" width=80px>';
+						echo "<p class='messageErreur'>Votre compte n'est pas encore actif. Merci d'envoyer un chèque d'inscription à l'adresse 'PPE-FLEX, 30 Boulevard Du Massacre, Nantes 44300.'</p>";
+					}	
 					require 'Vues/menu.php';
 					echo $this->maVideotheque->listeLesGenres();	
 				}
 				else
 				{
-					// destroy la session et je repars sur l'acceuil en affichant un texte pour prévenir la personne
+					// destroy la session et je repars sur l'accueil en affichant un texte pour prévenir la personne
 					//des mauvais identifiants;
 					session_destroy();
 					echo "</nav>
@@ -254,8 +322,11 @@ class Controleur
 				}
 				break;	
 
+			case 'oubliMdp' :
+				require 'Vues/changementMdp.php';
+				break;
+				
 			case 'retourAccueil':
-				echo "vous etes connecte";
 				require 'index.php';
 				echo $this->maVideotheque->listeLesGenres();					
 				break;

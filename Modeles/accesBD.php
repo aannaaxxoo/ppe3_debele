@@ -92,7 +92,6 @@ class accesBD
 		{
 			die('Problème dans chargement : '.$query->errorCode());
 		}
-
 		//retour du tableau à deux dimension
 		return $lesInfos;
 	}
@@ -120,7 +119,6 @@ class accesBD
 		{
 			die("Erreur dans insertClient : ".$requete->errorCode());
 		}
-
 		//retour de l'identifiant du nouveau tuple
 		return $sonId;
 		}
@@ -329,6 +327,55 @@ class accesBD
 			return $stringQuery.";";
 		}	
 
+		public function donneActifDepuisLogin($unLogin)
+		{
+			/*$requete="select emailClient from client where login = '".$unLogin."'";
+			$result = $this->conn->prepare($requete);
+			echo '<br>la requete est '.$requete.'<br>';
+			$vretour = $result->execute();
+			echo '<br>le resultat est: '.$vretour.'<br>';*/
+
+			$requete = $this->conn->prepare("SELECT actif FROM client WHERE login = '".$unLogin."'");
+			$requete->bindParam('login',$unLogin);
+			$requete->execute();
+			//echo '<br>la requete est '.$requete.'<br>';
+			$vretour = $requete->fetch();
+			$requete->closeCursor();
+			$v = $vretour[0];
+			return $v;
+	    }
+
+		/*public function donneActifDepuisLogin($uneTable,$unLogin)
+		{
+		//$prochainId[0]=0;
+		//définition de la requête SQL
+		$stringQuery = $this->specialCaseWhere("SELECT actif FROM ",$uneTable," WHERE login = ",$unLogin);
+		echo $stringQuery;
+		$requete = $this->conn->prepare($stringQuery);
+		$requete->bindValue(1,$unLogin);
+
+		echo "<br>La requete renvoi ".$requete->execute().'<br>';
+		$vretour = $requete->execute();
+		return $vretour;
+
+		//exécution de la requête SQL
+		if($requete->execute())
+		{
+			$nb=0;
+			//Retourne le prochain identifiant
+			while($row = $requete->fetch(PDO::FETCH_NUM))
+			{
+
+				$nb = $row[0];
+			}
+			return $nb+1;
+		}
+		else
+		{
+			die('Erreur sur donneActifDepuisLogin : '+$requete->errorCode());
+		}
+		}
+*/
 		public function modifierPasswordClient($unMail, $newPassword)
 		{
 			$requete="update client
@@ -347,7 +394,7 @@ class accesBD
 		{
 			$requete="update client
 					  set nomClient = '".$nouveauNom."' where login = '".$unLogin."'";;
-			$result = $this->conn->query($requete);
+			$result = $this->conn->prepare($requete);
 			echo '<br>la requete est '.$requete.'<br>';
 			if ($result)
 	    	{
@@ -480,37 +527,6 @@ class accesBD
 		{
 			die('Erreur sur donneProchainIdentifiantEpisode : '+$requete->errorCode());
 		}
-		}
-
-		public function donneActifDepuisLogin($uneTable,$unLogin)
-		{
-		//$prochainId[0]=0;
-		//définition de la requête SQL
-		$stringQuery = $this->specialCaseWhere("SELECT actif FROM ",$uneTable," WHERE login = ",$unLogin);
-		echo $stringQuery;
-		$requete = $this->conn->prepare($stringQuery);
-		$requete->bindValue(1,$unLogin);
-
-		echo "<br>La requete renvoi ".$requete->execute().'<br>';
-		$vretour = $requete->execute();
-		return $vretour;
-/*
-		//exécution de la requête SQL
-		if($requete->execute())
-		{
-			$nb=0;
-			//Retourne le prochain identifiant
-			while($row = $requete->fetch(PDO::FETCH_NUM))
-			{
-
-				$nb = $row[0];
-			}
-			return $nb+1;
-		}
-		else
-		{
-			die('Erreur sur donneActifDepuisLogin : '+$requete->errorCode());
-		}*/
 		}	
 	}
 

@@ -9,6 +9,10 @@ body
    background-color: #766852 !important;
 }
  
+.messageErreur{
+    font-size: 18px;
+}
+
 .avatar
 {
     width: 30px;

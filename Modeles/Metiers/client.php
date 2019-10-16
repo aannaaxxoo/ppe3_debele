@@ -65,8 +65,6 @@ Class client
     public function setEmail($email){
         $this->emailClient = $email;
     }
-
-
 }
 	
 ?>
