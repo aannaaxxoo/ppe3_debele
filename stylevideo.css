@@ -6,9 +6,9 @@
 body
 {
    margin-top: -24px !important;
-   background-color: #766852 !important;
+   background-color: #0E0E0E !important;
 }
- 
+
 .messageErreur{
     font-size: 18px;
 }
@@ -22,14 +22,14 @@ body
     margin-left: -5px;
     border-radius: 50%;
 }
- 
+
 .btn-avatar
 {
     background-color: transparent !important;
     border: none !important;
     padding: 0 !important;
 }
-  
+
 .pos-avatar
 {
     width: 50px;
