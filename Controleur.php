@@ -1,5 +1,4 @@
-﻿// nique les pd
-
+﻿
 
 
 
@@ -14,7 +13,7 @@ class Controleur
 	//---------------------------ATTRIBUTS PRIVES-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	private $maVideotheque;
-	
+
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//---------------------------CONSTRUCTEUR------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -22,8 +21,8 @@ class Controleur
 		{
 		$this->maVideotheque = new gestionVideo();
 		}
-		
-	
+
+
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//---------------------------METHODE D'AFFICHAGE DE L'ENTETE-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -31,14 +30,14 @@ class Controleur
 		{
 		//appel de la vue de l'entête
 		if(isset($_SESSION['login']) && isset($_SESSION['password']))
-		{ 	
+		{
 			echo "<br>La personne connecté est ".$_SESSION['login']."<br>";
 		}
 		require 'Vues/entete.php';
 		}
-		
-		
-	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
+
+
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//---------------------------METHODE D'AFFICHAGE DU PIED DE PAGE------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	public function affichePiedPage()
@@ -46,8 +45,8 @@ class Controleur
 		//appel de la vue du pied de page
 		require 'Vues/piedPage.php';
 		}
-		
-		
+
+
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//--------------------------METHODE D'AFFICHAGE DU MENU-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -56,8 +55,8 @@ class Controleur
 		//appel de la vue du menu
 		require 'Vues/menu.php';
 		}
-	
-	
+
+
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//--------------------------METHODE D'AFFICHAGE DES VUES----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -67,7 +66,7 @@ class Controleur
 		//SELON la vue demandée
 		switch ($vue)
 			{
-			case 'compte': 	
+			case 'compte':
 				$this->vueCompte($action);
 				break;
 			case 'film':
@@ -84,17 +83,17 @@ class Controleur
 				break;
 			}
 		}
-				
+
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//----------------------------Mon Compte--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	private function vueCompte($action)
 		{
-			
+
 		//SELON l'action demandée
 		switch ($action)
-			{	
-			
+			{
+
 			//CAS visualisation de mes informations-------------------------------------------------------------------------------------------------
 			case 'visualiser' :
 				//ici il faut pouvoir avoir accès au information de l'internaute connecté
@@ -104,7 +103,7 @@ class Controleur
 				$_SESSION['afficherInformationsCompte'] = $this->maVideotheque->donneInformationsSelonLogin($login);
 				require 'Vues/voirCompte.php';
 				break;
-				
+
 			//CAS enregistrement d'une modification sur le compte------------------------------------------------------------------------------
 			case 'modifier' :
 				// ici il faut pouvoir modifier le mot de passe de l'utilisateur
@@ -128,11 +127,11 @@ class Controleur
 				{
 					echo 'Le compte est actif';
 					if($nouveauPrenom != "" && strlen($nouveauPrenom) > 2 && strlen($nouveauPrenom) < 50)
-						{ 
+						{
 							$this->maVideotheque->modifierPrenomClient($_SESSION['login'], $nouveauPrenom);
 							$aModifieAuMoinsUnParametre = true;
 						}
-						else 
+						else
 						{
 							if($nouveauPrenom != "")
 							{
@@ -140,15 +139,15 @@ class Controleur
 								require 'Vues/modifierCompte.php';
 								echo $erreur;
 								break;
-							} 
+							}
 						}
 
 					if($nouveauNom != "" && strlen($nouveauNom) > 2 && strlen($nouveauNom) < 50)
-						{ 
+						{
 							$this->maVideotheque->modifierNomClient($_SESSION['login'], $nouveauNom);
-							$aModifieAuMoinsUnParametre = true; 
+							$aModifieAuMoinsUnParametre = true;
 						}
-						else 
+						else
 						{
 							if($nouveauNom != "")
 							{
@@ -156,15 +155,15 @@ class Controleur
 								require 'Vues/modifierCompte.php';
 								echo $erreur;
 								break;
-							} 
+							}
 						}
 
-					if($nouveauEmail != "" && filter_var($nouveauEmail, FILTER_VALIDATE_EMAIL)) 
+					if($nouveauEmail != "" && filter_var($nouveauEmail, FILTER_VALIDATE_EMAIL))
 						{
-							$this->maVideotheque->modifierEmailClient($_SESSION['login'], $nouveauEmail); 
+							$this->maVideotheque->modifierEmailClient($_SESSION['login'], $nouveauEmail);
 							$aModifieAuMoinsUnParametre = true;
 						}
-						else 
+						else
 						{
 							if($nouveauEmail != "")
 							{
@@ -172,17 +171,17 @@ class Controleur
 								require 'Vues/modifierCompte.php';
 								echo $erreur;
 								break;
-							} 
+							}
 						}
-						
+
 					if($nouveauMdp != "" && strlen($nouveauMdp) > 2 && strlen($nouveauMdp) < 50
 						&& $nouveauMdp == $confirmationNouveauMdp
 						&& $mdpActuel == $_SESSION['password'])
-						{ 
-							$this->maVideotheque->modifierMdpClient($_SESSION['login'], $nouveauMdp); 
+						{
+							$this->maVideotheque->modifierMdpClient($_SESSION['login'], $nouveauMdp);
 							$aModifieAuMoinsUnParametre = true;
 						}
-						else 
+						else
 						{
 							if($nouveauMdp != "")
 							{
@@ -190,18 +189,18 @@ class Controleur
 								echo $erreur;
 								require 'Vues/modifierCompte.php';
 								break;
-							} 
+							}
 						}
 					if($aModifieAuMoinsUnParametre = false)
 					{
 						echo "<br>ERREUR<br>Aucune modification détectée.";
-						require 'Vues/modifierCompte.php'; 
-						break;		
+						require 'Vues/modifierCompte.php';
+						break;
 					}
 					else
 					{
-						require 'Vues/enregistrer.php'; 
-						break;	
+						require 'Vues/enregistrer.php';
+						break;
 					}
 				}
 				else
@@ -211,8 +210,8 @@ class Controleur
 					echo $erreur;
 					break;
 				}
-				
-				
+
+
 
 
 			//CAS ajouter un utilisateur ------------------------------------------------------------------------------
@@ -223,29 +222,29 @@ class Controleur
 				$unEmailClient=$_GET['emailClient'];
 				$uneDateAbonnementClient=$_GET['dateAbonnementClient'];
 				$unLogin=$_GET['loginInscription'];
-				$unPassword=$_GET['passwordInscription'];			
+				$unPassword=$_GET['passwordInscription'];
 				if($this->maVideotheque->verifLogin($unLogin, $unPassword) == 1 || empty($unLogin) || empty($unPassword))
 				{
-				    echo "ERREUR LORS DE L'INSCRIPTION";			    
+				    echo "ERREUR LORS DE L'INSCRIPTION";
 				}
-				else 
+				else
 				{
     				$unIdClient=$this->maVideotheque->donneProchainIdentifiant('CLIENT','idClient');
-    				$this->maVideotheque->ajouteUnClient($unNomClient, $unPrenomClient, $unEmailClient, 
-    					$uneDateAbonnementClient, $unLogin, $unPassword, $unIdClient);				
-    				
+    				$this->maVideotheque->ajouteUnClient($unNomClient, $unPrenomClient, $unEmailClient,
+    					$uneDateAbonnementClient, $unLogin, $unPassword, $unIdClient);
+
     				//ENVOI DU MAIL A L'UTILISATEUR
 					$expediteur = 'joseph.ppe3@gmail.com';
 					$objet = 'PPE-FLIX | Bienvenue sur notre plateforme !'; // Objet du message
 					$headers  = 'MIME-Version: 1.0' . "\n"; // Version MIME
 					$headers .= 'Reply-To: '.$expediteur."\n"; // Mail de reponse
 					$headers .= 'From: <'.$expediteur.'>'."\n"; // Expediteur
-					$headers .= 'Delivered-to: '.$unEmailClient."\n"; // Destinataire      
-					$message = 'Bienvenue sur PPE-FLIX ! 
+					$headers .= 'Delivered-to: '.$unEmailClient."\n"; // Destinataire
+					$message = 'Bienvenue sur PPE-FLIX !
 					A la réception de votre chèque, votre compte sera validé dans les plus brefs délais.
 					PPE-FLIX, 30 Boulevard Du Massacre, Nantes 44300';
 					mail($unEmailClient, $objet, $message, $headers); // Envoi du message
-    				
+
 
     				//ENVOI DU MAIL A L'ADMIN
 					$expediteur = 'joseph.ppe3@gmail.com';
@@ -253,13 +252,13 @@ class Controleur
 					$headers  = 'MIME-Version: 1.0' . "\n"; // Version MIME
 					$headers .= 'Reply-To: '.$expediteur."\n"; // Mail de reponse
 					$headers .= 'From: <'.$expediteur.'>'."\n"; // Expediteur
-					$headers .= 'Delivered-to: '.$expediteur."\n"; // Destinataire      
+					$headers .= 'Delivered-to: '.$expediteur."\n"; // Destinataire
 					$message = "Une nouvelle personne s'est inscrite sur PPE-FLIX.
 					- Nom:".$unNomClient." ".$unPrenomClient."
 					- Email:".$unEmailClient.".";
 					mail($expediteur, $objet, $message, $headers); // Envoi du message
     				require 'Vues/enregistrer.php';
-				} 
+				}
 				break;
 
 			case 'envoiMail' :
@@ -271,20 +270,20 @@ class Controleur
 					$this->maVideotheque->modifierPasswordClient($destinataire, $newPassword);
 
 				    echo "<br>L'adresse email ".$destinataire." est considérée comme valide.<br>";
-				
+
 				    //CREATION DU MAIL
 					$expediteur = 'joseph.ppe3@gmail.com';
 					$objet = 'PPE-FLIX | Demande de changement de votre mot de passe'; // Objet du message
 					$headers  = 'MIME-Version: 1.0' . "\n"; // Version MIME
 					$headers .= 'Reply-To: '.$expediteur."\n"; // Mail de reponse
 					$headers .= 'From: <'.$expediteur.'>'."\n"; // Expediteur
-					$headers .= 'Delivered-to: '.$destinataire."\n"; // Destinataire      
+					$headers .= 'Delivered-to: '.$destinataire."\n"; // Destinataire
 					$message = 'Bonjour
-					Vous avez effectué une demande de changement de mot de passe sur PPE-FLIX 
+					Vous avez effectué une demande de changement de mot de passe sur PPE-FLIX
 					Votre nouveau mot de passe est : '.$newPassword;
 					mail($destinataire, $objet, $message, $headers); // Envoi du message
-				} 
-				else 
+				}
+				else
 				{
 				    echo "<br>L'Adresse email ".$email." est considérée comme invalide.<br>";
 				}
@@ -298,19 +297,19 @@ class Controleur
 				//pour cela je verifie dans le conteneurClient via la gestion.
 				$unLogin=$_GET['login'];
 				$unPassword=$_GET['password'];
-				$resultat=$this->maVideotheque->verifLogin($unLogin, $unPassword);	
+				$resultat=$this->maVideotheque->verifLogin($unLogin, $unPassword);
 				//si le client existe alors j'affiche le menu et la page visuGenre.php
 				if($resultat==1)
 				{
-					
+
 					$actif  = $this->maVideotheque->donneActifDepuisLogin($unLogin);
 					echo '<br>Compte actif: '.$actif.'<br>';
-					if($actif == 0){	
+					if($actif == 0){
 						echo '<img src="Images/alert.png" alt="Alerte" width=80px>';
 						echo "<p class='messageErreur'>Votre compte n'est pas encore actif. Merci d'envoyer un chèque d'inscription à l'adresse 'PPE-FLEX, 30 Boulevard Du Massacre, Nantes 44300.'</p>";
-					}	
+					}
 					require 'Vues/menu.php';
-					echo $this->maVideotheque->listeLesGenres();	
+					echo $this->maVideotheque->listeLesGenres();
 				}
 				else
 				{
@@ -325,19 +324,19 @@ class Controleur
 							</div>
 							<meta http-equiv='refresh' content='1;index.php'>";
 				}
-				break;	
+				break;
 
 			case 'oubliMdp' :
 				require 'Vues/changementMdp.php';
 				break;
-				
+
 			case 'retourAccueil':
 				require 'index.php';
-				echo $this->maVideotheque->listeLesGenres();					
+				echo $this->maVideotheque->listeLesGenres();
 				break;
 			}
 		}
-	
+
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//----------------------------Film--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -345,8 +344,8 @@ class Controleur
 		{
 		//SELON l'action demandée
 		switch ($action)
-			{	
-			
+			{
+
 			//CAS visualisation de tous les films-------------------------------------------------------------------------------------------------
 			case "visualiser" :
 				//ici il faut pouvoir visualiser l'ensemble des films
@@ -356,9 +355,9 @@ class Controleur
 			    echo "Session: ".$_SESSION['lesFilms'];
 				require 'Vues/voirFilm.php';
 				break;
-				
+
 			}
-		}	
+		}
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//----------------------------Serie--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -367,16 +366,16 @@ class Controleur
 		{
 		//SELON l'action demandée
 		switch ($action)
-			{	
-			
+			{
+
 			//CAS visualisation de toutes les Series-------------------------------------------------------------------------------------------------
 			case "visualiser" :
-				//ici il faut pouvoir visualiser l'ensemble des Séries 
+				//ici il faut pouvoir visualiser l'ensemble des Séries
 				require 'Vues/construction.php';
 				break;
-				
+
 			}
-		}			
+		}
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//----------------------------Vidéotheque-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -384,8 +383,8 @@ class Controleur
 		{
 		//SELON l'action demandée
 		switch ($action)
-			{	
-			
+			{
+
 			//CAS Choix d'un genre------------------------------------------------------------------------------------------------
 			case "choixGenre" :
 				if ($this->maVideotheque->donneNbGenres()==0)
@@ -402,7 +401,7 @@ class Controleur
 					require 'Vues/voirRessource.php';
 					}
 				break;
-				
+
 			//CAS enregistrement d'une ressource dans la base------------------------------------------------------------------------------
 			case "enregistrer" :
 				$nom = $_POST['nomRessource'];
@@ -422,8 +421,8 @@ class Controleur
 					}
 				break;
 			}
-		}	
+		}
 
 	}
-	
+
 ?>
