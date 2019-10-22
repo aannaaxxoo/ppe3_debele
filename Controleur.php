@@ -263,31 +263,50 @@ class Controleur
 
 			case 'envoiMail' :
 				$destinataire = $_GET['emailOubliMotDePasse'];
-				if (filter_var($destinataire, FILTER_VALIDATE_EMAIL)) //et que l'adresse est dans la BDD
+				$confirmationLogin = $_GET['confirmationLogin'];
+				if ($this->maVideotheque->confirmerClientAvecEmailEtLogin($confirmationLogin, $destinataire))
 				{
-					echo '<br>preparation de la requete UPDATE...<br>';
-					$newPassword = $this->maVideotheque->genererChaineAleatoire(8); //génération du nouveau mot de passe
-					$this->maVideotheque->modifierPasswordClient($destinataire, $newPassword);
+					if($this->maVideotheque->donneActifDepuisLogin($confirmationLogin) == 1)
+					{
+						//echo "<br>Ce compte est OK<br>";
+						if (filter_var($destinataire, FILTER_VALIDATE_EMAIL)) //et que l'adresse est dans la BDD
+						{
+							echo '<br>preparation de la requete UPDATE...<br>';
+							$newPassword = $this->maVideotheque->genererChaineAleatoire(8); //génération du nouveau mot de passe
+							$this->maVideotheque->modifierPasswordClient($destinataire, $newPassword);
 
-				    echo "<br>L'adresse email ".$destinataire." est considérée comme valide.<br>";
+						    echo "<br>L'adresse email ".$destinataire." est considérée comme valide.<br>";
 
-				    //CREATION DU MAIL
-					$expediteur = 'joseph.ppe3@gmail.com';
-					$objet = 'PPE-FLIX | Demande de changement de votre mot de passe'; // Objet du message
-					$headers  = 'MIME-Version: 1.0' . "\n"; // Version MIME
-					$headers .= 'Reply-To: '.$expediteur."\n"; // Mail de reponse
-					$headers .= 'From: <'.$expediteur.'>'."\n"; // Expediteur
-					$headers .= 'Delivered-to: '.$destinataire."\n"; // Destinataire
-					$message = 'Bonjour
-					Vous avez effectué une demande de changement de mot de passe sur PPE-FLIX
-					Votre nouveau mot de passe est : '.$newPassword;
-					mail($destinataire, $objet, $message, $headers); // Envoi du message
+						    //CREATION DU MAIL
+							$expediteur = 'joseph.ppe3@gmail.com';
+							$objet = 'PPE-FLIX | Demande de changement de votre mot de passe'; // Objet du message
+							$headers  = 'MIME-Version: 1.0' . "\n"; // Version MIME
+							$headers .= 'Reply-To: '.$expediteur."\n"; // Mail de reponse
+							$headers .= 'From: <'.$expediteur.'>'."\n"; // Expediteur
+							$headers .= 'Delivered-to: '.$destinataire."\n"; // Destinataire
+							$message = 'Bonjour
+							Vous avez effectué une demande de changement de mot de passe sur PPE-FLIX
+							Votre nouveau mot de passe est : '.$newPassword;
+							mail($destinataire, $objet, $message, $headers); // Envoi du message
+							require 'Vues/enregistrer.php';
+						}
+						else //Format d'email incorrect
+						{
+						    echo "<br>L'Adresse email ".$email." est considérée comme invalide.<br>";
+						    require 'Vues/changementMdp.php';
+						}
+					}
+					else //Compte inactif
+					{
+						echo "<br>Le compte saisi n'est pas actif<br>";
+						require 'Vues/changementMdp.php';
+					}				
 				}
-				else
+				else //Le login rentré n'est pas associé à l'email ! Ce compte n'existe pas dans la BDD
 				{
-				    echo "<br>L'Adresse email ".$email." est considérée comme invalide.<br>";
+					echo "<br>Ce compte n'existe pas<br>";
+					require 'Vues/changementMdp.php';
 				}
-				require 'Vues/enregistrer.php';
 				break;
 
 			//CAS verifier un utilisateur ------------------------------------------------------------------------------

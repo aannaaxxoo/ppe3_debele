@@ -385,6 +385,11 @@ Class gestionVideo
 		return $this->maBD->modifierMdpClient($unLogin, $nouveauMdp);
 		return $this->tousLesClients->modifierMdpClient($unLogin, $nouveauMdp);
 	}
+
+	public function confirmerClientAvecEmailEtLogin($unLogin, $unEmail)
+	{
+		return $this->tousLesClients->confirmerClientAvecEmailEtLogin($unLogin, $unEmail);
+	}
 }
 
 ?>

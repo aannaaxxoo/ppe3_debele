@@ -217,5 +217,20 @@ Class conteneurClient
 		}
 		return $var;
 	}
+
+	public function confirmerClientAvecEmailEtLogin($unLogin, $unEmail)
+    {
+    	$confirmerClient = false;
+    	$monClient;
+    	foreach($this->lesClients as $unClient)
+		{
+			if($unLogin == $unClient->getLoginClient() && $unEmail == $unClient->getEmailClient())
+			{
+				$confirmerClient = true;
+			}
+		}
+		echo "<br>confirmerClient : ".$confirmerClient."<br>";
+		return $confirmerClient;
+	}
 }
 ?> 

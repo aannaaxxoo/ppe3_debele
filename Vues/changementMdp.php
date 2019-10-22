@@ -9,6 +9,9 @@
 		<i>Adresse email</i><br>
 		<INPUT type = 'text' name = 'emailOubliMotDePasse'/>
 
+		<br><i>Login</i><br>
+		<INPUT type = 'text' name = 'confirmationLogin'/>
+
 		<br><br>
 		<input type='hidden' name='vue' value='compte'>
         <input type='hidden' name='action' value='envoiMail'/>
