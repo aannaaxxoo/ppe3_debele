@@ -5,38 +5,49 @@ Class conteneurFilm
 	{
 	//ATTRIBUTS PRIVES-------------------------------------------------------------------------
 	private $lesFilms;
-	
+
 	//CONSTRUCTEUR-----------------------------------------------------------------------------
 	public function __construct()
 		{
 		$this->lesFilms = new arrayObject();
 		}
-	
+
 	//METHODE AJOUTANT UN Film------------------------------------------------------------------------------
 	public function ajouteUnFilm($unIdFilm, $unTitreSupport, $unRealisateurSupport, $uneImageSupport, $leGenreSupport,$laDureeFilm)
 		{
 		$unFilm = new film($unIdFilm, $unTitreSupport, $unRealisateurSupport, $uneImageSupport, $leGenreSupport,$laDureeFilm);
 		$this->lesFilms->append($unFilm);
-			
+
 		}
-		
+
 	//METHODE RETOURNANT LE NOMBRE de films-------------------------------------------------------------------------------
 	public function nbFilms()
 		{
 		return $this->lesFilms->count();
-		}	
-		
+		}
+
 	//METHODE RETOURNANT LA LISTE DES  films-----------------------------------------------------------------------------------------
 	public function listeDesFilms()
 		{
+			/*
 		$liste = '';
 		foreach ($this->lesFilms as $unFilm)
 			{	$leGenre=$unFilm->getLeGenreDuFilm();
-			    $liste = $liste.'Film N° : "'.$unFilm->getIdFilm().' -> Film : '.$unFilm->getTitreFilm().' - '.$leGenre.' - '.$unFilm->getDureeFilm().'><br>';
+			    $liste = $liste.'Film N° : '.$unFilm->getIdFilm().' -> Film : '.$unFilm->getTitreFilm().' - '.$leGenre.' - '.$unFilm->getDureeFilm().' - image: <img src="Images/'.$unFilm->getUneImageDuFilm().'"</img> <br>';
 			}
+		return $liste;*/
+		$liste = "<div class='container h-75'>
+										<div class='row h-75 justify-content-center align-items-center'>
+												<table>
+														<tbody>";
+		foreach ($this->lesFilms as $unFilm)
+			{	$leGenre=$unFilm->getLeGenreDuFilm();
+             $liste = $liste.'<td><tr>Film N° : '.$unFilm->getIdFilm().' -> Film : '.$unFilm->getTitreFilm().' - '.$leGenre.' - '.$unFilm->getDureeFilm().' - <img src="Images/'.$unFilm->getUneImageDuFilm().'"</img></tr></td> <br>';
+						}
+						$liste=$liste."</tbody></table></div></div>";
 		return $liste;
 		}
-		
+
 		//METHODE RETOURNANT LA LISTE DES films DANS UNE BALISE <SELECT>------------------------------------------------------------------
 	public function lesFilmsAuFormatHTML()
 		{
@@ -47,9 +58,9 @@ Class conteneurFilm
 			}
 		$liste = $liste."</SELECT>";
 		return $liste;
-		}		
+		}
 
-//METHODE RETOURNANT UN film A PARTIR DE SON NUMERO--------------------------------------------	
+//METHODE RETOURNANT UN film A PARTIR DE SON NUMERO--------------------------------------------
 	public function donneObjetFilmDepuisNumero($unIdFilm)
 		{
 		//initialisation d'un booléen (on part de l'hypothèse que le film n'existe pas)
@@ -67,7 +78,7 @@ Class conteneurFilm
 				$trouve=true;
 				//sauvegarde le film courant
 				$leBonFilm = $iFilm->current();
-				
+
 				}
 			//SINON on passe au film suivant
 			else
@@ -76,10 +87,10 @@ Class conteneurFilm
 			$leBonSupport= new support($leBonFilm->getIdFilm(), $leBonFilm->getTitreFilm(), $leBonFilm->getRealisateurFilm(), $leBonFilm->getImageFilm(), $leGenreSupport);
 		return $leBonFilm;
 		}
-//METHODE RETOURNANT UN film A PARTIR DE SON NUMERO--------------------------------------------	
+//METHODE RETOURNANT UN film A PARTIR DE SON NUMERO--------------------------------------------
 	public function donneObjetSupportDepuisNumeroFilm($unIdFilm)
 		{
-			
+
 		//initialisation d'un booléen (on part de l'hypothèse que le film n'existe pas)
 		$trouve=false;
 		$leBonFilm=null;
@@ -97,15 +108,15 @@ Class conteneurFilm
 				//sauvegarde le film courant
 				$leBonFilm = $iFilm->current();
 				$leBonSupport= new support($leBonFilm->getIdFilm(), $leBonFilm->getTitreFilm(), $leBonFilm->getRealisateurFilm(), $leBonFilm->getImageFilm(), $leGenreSupport);
-		
+
 				}
 			//SINON on passe au film suivant
 			else
 				$iFilm->next();
 			}
 		return $leBonSupport;
-		}		
-	
+		}
+
 	}
-	
-?> 
+
+?>

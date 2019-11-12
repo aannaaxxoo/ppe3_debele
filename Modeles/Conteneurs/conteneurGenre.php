@@ -34,7 +34,7 @@ Class conteneurGenre
 	                        <table>
 	                            <tbody>";
 			foreach ($this->lesGenres as $unGenre)
-				{	$liste = $liste.'<td><tr><img src="Images/genres/'.$unGenre->getNomImage().'"</img></tr></td>';
+				{	$liste = $liste.'<td><tr><a href="Vues/'.$unGenre->getLibelleGenre().'.php"><img src="Images/genres/'.$unGenre->getNomImage().'"</img></a></tr></td>';
 				}
 				$liste=$liste."</tbody></table></div></div>";
 			return $liste;

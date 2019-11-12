@@ -31,7 +31,7 @@ Class film extends support
 	}
 	public function getUneImageDuFilm()
 	{
-		return parent::getImageSupport;
+		return parent::getImageSupport();
 	}	
 		
 	public function getLeGenreDuFilm()
